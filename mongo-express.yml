@@ -7,7 +7,7 @@ metadata:
 spec:
   replica: 1
   selector:
-     MatchLabels:
+     matchLabels:
         app: mongo-express
   template:
      metadata:
@@ -31,7 +31,7 @@ spec:
                 name: mongodb-secret
                 key: mongodb-root-password
           - name: ME_CONFIG_MONGODB_SERVER
-            confihmapKeyRef:
+            configmapKeyRef:
                 name: mongodb-configmap
                 key: database_url
 
@@ -40,7 +40,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongo-express-service
-spec
+spec:
   type: LoadBalancer
   selector:
     app: mongo-express
