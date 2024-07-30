@@ -1,4 +1,4 @@
-apiVersion: apps/V1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongo-express
@@ -27,7 +27,7 @@ spec:
                 key: mongodb-root-username
           - name: ME_CONFIG_MONGODB_ADMINPASSWORD
             valueFrom:
-              secretkeyRef:
+              secretKeyRef:
                 name: mongodb-secret
                 key: mongodb-root-password
           - name: ME_CONFIG_MONGODB_SERVER
@@ -43,7 +43,7 @@ metadata:
   selector:
     app: mongo-express
   ports:
-  - protocol: TCP
+  - protocol: "TCP"
     port: 8081
     targetPort: 8081
     nodePort: 30000
