@@ -40,7 +40,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo-express
+  name: mongo-express-ss
 spec:
   type: LoadBalancer
   selector:
