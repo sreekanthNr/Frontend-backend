@@ -1,54 +1,54 @@
-apiVersion: apps/v1
+a
 kind: Deployment
 metadata:
-  name: mongo-express
+  name: webapp-deployment
   labels:
-     app: mongo-express
+    app: webapp
 spec:
   replicas: 1
   selector:
-     matchLabels:
-        app: mongo-express
+    matchLabels:
+      app: webapp
   template:
-     metadata:
-        labels:
-          app: mongo-express
-     spec:
-        containers:
-        - name: mongo-express
-          image: mongo-express
-          ports:
-          - containerPort: 8081
-          env:
-          - name: ME_CONFIG_MONGODB_ADMINUSERNAME
-            valueFrom: 
-              secretKeyRef:
-                name: mongodb-secret
-                key: mongodb-root-username
-          - name: ME_CONFIG_MONGODB_ADMINPASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: mongodb-secret
-                key: mongodb-root-password
-          - name: ME_CONFIG_MONGODB_SERVER
-            valueFrom:
-              configMapKeyRef:
-                name: mongodb-configmap
-                key: database_url
-
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: mongo-express:latest
+        ports:
+ # as mentioned in dockerhub document for mongo-express
+        - containerPort: 8081
+        env:
+        - name: ME_CONFIG_MONGODB_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-config
+              key: mongo-url
+        - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-user
+        - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-password
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo-express-ss1
+  name: webapp-service
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
-    app: mongo-express
+    app: webapp
   ports:
-  - protocol: TCP
-    port: 8081
-    targetPort: 8081
-    nodePort: 30000
-        
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+      # anything in between 30000 to 32767
+      nodePort: 30100
         
